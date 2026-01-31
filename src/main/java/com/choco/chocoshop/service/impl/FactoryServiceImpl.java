@@ -3,10 +3,12 @@ package com.choco.chocoshop.service.impl;
 import com.choco.chocoshop.model.Factory;
 import com.choco.chocoshop.repository.FactoryRepository;
 import com.choco.chocoshop.service.FactoryService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class FactoryServiceImpl implements FactoryService {
 
     private final FactoryRepository  factoryRepository;

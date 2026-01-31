@@ -4,6 +4,7 @@ import com.choco.chocoshop.model.Role;
 import com.choco.chocoshop.model.User;
 import com.choco.chocoshop.repository.UserRepository;
 import com.choco.chocoshop.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +33,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
     }
 
     @Override
