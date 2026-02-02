@@ -15,7 +15,8 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    public ResponseEntity<String> register(@RequestBody User user,@RequestParam String confirmPassword) {
+    @PostMapping("/register")
+    public ResponseEntity<String>   register(@RequestBody User user,@RequestParam String confirmPassword) {
         if(!user.getPassword().equals(confirmPassword)){
             return ResponseEntity.badRequest().body("Lozinke se ne poklapaju!");
         }
@@ -30,6 +31,7 @@ public class AuthController {
         return ResponseEntity.ok("Korisnik registrovan uspesno!");
     }
 
+    @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
         return userService.findByUsername(username)
                 .map(user -> {
@@ -40,7 +42,7 @@ public class AuthController {
                     }
                 }).orElse(ResponseEntity.badRequest().body("Korisnik ne postoji!"));
     }
-
+    @PostMapping("/logout")
     public ResponseEntity<String> logout(){
         return ResponseEntity.ok("Uspesna odjava!");
     }

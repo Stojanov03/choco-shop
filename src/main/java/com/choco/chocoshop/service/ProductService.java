@@ -10,4 +10,14 @@ public interface ProductService {
     Optional<Product> getProductById(Long id);
     Product saveProduct(Product product);
     void deleteProductById(Long id);
+    List<Product> getAvailableProducts();
+    List<Product> searchProducts(
+            String uniqueCode,
+            String productName,
+            String factoryName,
+            Integer minQuantity,
+            Double minPrice,
+            Double maxPrice
+    );
+    List<Product> getAllProductsSorted(String sortBy);
 }
