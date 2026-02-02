@@ -4,10 +4,12 @@ import com.choco.chocoshop.model.Purchase;
 import com.choco.chocoshop.model.User;
 import com.choco.chocoshop.service.PurchaseService;
 import com.choco.chocoshop.service.UserService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -34,6 +36,19 @@ public class PurchaseController {
         );
     }
 
+    @GetMapping("/my-purchases/filter")
+    public ResponseEntity<List<Purchase>> getMyPurchasesByDate(
+            Principal principal,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+
+        User user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return ResponseEntity.ok(
+                purchaseService.getPurchaseByUserAndDateRange(user, startDate, endDate)
+        );
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Purchase> getPurchaseById(@PathVariable Long id) {

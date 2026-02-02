@@ -11,6 +11,8 @@ public interface ProductService {
     Product saveProduct(Product product);
     void deleteProductById(Long id);
     List<Product> getAvailableProducts();
+    List<Product> getProductsOnSale();
+    List<Product> getTopSellingProducts(int limit);
     List<Product> searchProducts(
             String uniqueCode,
             String productName,

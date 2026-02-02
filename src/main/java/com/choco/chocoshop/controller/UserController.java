@@ -54,10 +54,11 @@ public class UserController {
                     return ResponseEntity.ok(user);
                 }).orElse(ResponseEntity.notFound().build());
     }
+    @PutMapping("/profile/{username}")
     public ResponseEntity<String> updateProfile(@PathVariable String username,
                                                 @RequestBody User updateUser,
-                                                @RequestParam String newPassword,
-                                                @RequestParam String confirmPassword
+                                                @RequestParam(required = false) String newPassword,
+                                                @RequestParam(required = false) String confirmPassword
     ){
         return userService.findByUsername(username)
                 .map(user -> {

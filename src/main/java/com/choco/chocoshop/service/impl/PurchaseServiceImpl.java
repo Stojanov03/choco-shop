@@ -37,7 +37,12 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public List<Purchase> getPurchaseByUser(User user) {
-        return List.of();
+        return purchaseRepository.findByUser(user);
+    }
+
+    @Override
+    public List<Purchase> getPurchaseByUserAndDateRange(User user, LocalDateTime startDate, LocalDateTime endDate) {
+        return purchaseRepository.findByUserAndPurchaseDateBetween(user, startDate, endDate);
     }
 
     @Override

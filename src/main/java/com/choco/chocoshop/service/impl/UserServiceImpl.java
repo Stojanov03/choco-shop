@@ -5,6 +5,8 @@ import com.choco.chocoshop.model.User;
 import com.choco.chocoshop.repository.UserRepository;
 import com.choco.chocoshop.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,13 +16,16 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public User register(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.BUYER);
         return userRepository.save(user);
     }

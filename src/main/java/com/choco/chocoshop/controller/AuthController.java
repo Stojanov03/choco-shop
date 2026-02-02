@@ -4,6 +4,7 @@ import com.choco.chocoshop.model.User;
 import com.choco.chocoshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -15,8 +16,11 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping("/register")
-    public ResponseEntity<String>   register(@RequestBody User user,@RequestParam String confirmPassword) {
+    public ResponseEntity<String>  register(@RequestBody User user,@RequestParam String confirmPassword) {
         if(!user.getPassword().equals(confirmPassword)){
             return ResponseEntity.badRequest().body("Lozinke se ne poklapaju!");
         }
@@ -35,15 +39,15 @@ public class AuthController {
     public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
         return userService.findByUsername(username)
                 .map(user -> {
-                    if(user.getPassword().equals(password)){
+                    if(passwordEncoder.matches(password, user.getPassword())){
                         return ResponseEntity.ok("Uspesna prijava!");
                     }else {
                         return ResponseEntity.badRequest().body("Pogresna lozinka!");
                     }
                 }).orElse(ResponseEntity.badRequest().body("Korisnik ne postoji!"));
     }
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(){
-        return ResponseEntity.ok("Uspesna odjava!");
-    }
+//    @PostMapping("/logout")
+//    public ResponseEntity<String> logout(){
+//        return ResponseEntity.ok("Uspesna odjava!");
+//    }
 }

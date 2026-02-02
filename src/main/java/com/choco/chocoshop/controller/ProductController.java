@@ -18,6 +18,47 @@ public class ProductController {
     public List<Product> getALlProducts(){
         return productService.getAllProducts();
     }
+
+    @GetMapping("/available")
+    public List<Product> getAvailableProducts(){
+        return productService.getAvailableProducts();
+    }
+
+    @GetMapping("/on-sale")
+    public List<Product> getProductsOnSale(){
+        return productService.getProductsOnSale();
+    }
+
+    @GetMapping("/top-selling")
+    public List<Product> getTopSellingProducts(@RequestParam(defaultValue = "5") int limit){
+        return productService.getTopSellingProducts(limit);
+    }
+
+    @GetMapping("/homepage")
+    public List<Product> getHomepageProducts(@RequestParam(defaultValue = "5") int limit){
+        List<Product> onSale = productService.getProductsOnSale();
+        if (!onSale.isEmpty()) {
+            return onSale.stream().limit(limit).toList();
+        }
+        return productService.getTopSellingProducts(limit);
+    }
+
+    @GetMapping("/search")
+    public List<Product> searchProducts(
+            @RequestParam(required = false) String uniqueCode,
+            @RequestParam(required = false) String productName,
+            @RequestParam(required = false) String factoryName,
+            @RequestParam(required = false) Integer minQuantity,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice){
+        return productService.searchProducts(uniqueCode, productName, factoryName, minQuantity, minPrice, maxPrice);
+    }
+
+    @GetMapping("/sort")
+    public List<Product> getAllProductsSorted(@RequestParam String sortBy){
+        return productService.getAllProductsSorted(sortBy);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id){
         return productService.getProductById(id)
